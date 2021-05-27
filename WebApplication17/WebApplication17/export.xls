@@ -1,0 +1,29 @@
+<div>
+	<table cellspacing="0" rules="all" border="1" style="border-collapse:collapse;">
+		<tr>
+			<th scope="col">S NO</th><th scope="col">PRODUCT NAME</th><th scope="col">DESCRIPTION</th>
+		</tr><tr>
+			<td>1</td><td>Valour DET-XLF</td><td>Economical APEO Free, Biodegradable, ultra low foaming, detergent for scouring of cotton and its blends with good wetting and rewetting properties</td>
+		</tr><tr>
+			<td>2</td><td>Valour DET-ZF</td><td>Efficient APEO Free, Biodegradable, ultra low foaming, detergent for scouring of cotton and its blends with excellent wetting and rewetting properties</td>
+		</tr><tr>
+			<td>3</td><td>Valour DET-AIO</td><td>Four in One APEO free scouring, stabilizer, sequestering and anticreasing agent for pretreatment of cellulosics and its blends</td>
+		</tr><tr>
+			<td>4</td><td>Valour LUB-ACA</td><td>An economical ready to use anticreasing agent for wet processing of cotton and its blends to prevent crease marks or rope marks during processing</td>
+		</tr><tr>
+			<td>5</td><td>Valour CAN-ECO</td><td>Economical acetic acid substitute which is a blend of organic acids</td>
+		</tr><tr>
+			<td>6</td><td>Valour CAN</td><td>A special blend of organic acids to neutralize core alkali which might migrate during subsequent wet processing operations</td>
+		</tr><tr>
+			<td>7</td><td>Valour RDL</td><td>Dye levelling agent used in reactive dyeing of cotton and its blends. It prevents dye agglomeration and thus prevents streakiness in soft flow dyeing</td>
+		</tr><tr>
+			<td>8</td><td>Valour CLN-P</td><td>Copolymer based economical soaping off agent for reactive dyed / printed cotton fabrics with antiredeposition properties</td>
+		</tr><tr>
+			<td>9</td><td>Valour CLN-AD</td><td>Copolymer based concentrated soaping off agent for reactive dyed / printed cotton fabrics with antiredeposition properties</td>
+		</tr><tr>
+			<td>10</td><td>Valour CLN-DBC</td><td>A Concentrated soaping off agent which can also be used a dye bath conditioner</td>
+		</tr><tr>
+			<td>11</td><td>Valour NF</td><td>Polyamine based economical non formaldehyde dye fixing agent for reactive and direct dyed fabrics</td>
+		</tr>
+	</table>
+</div>

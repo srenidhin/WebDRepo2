@@ -1,0 +1,60 @@
+﻿<style>
+    .modal:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .modal .modal-content {
+            padding: 20px 20px 20px 20px;
+            -webkit-animation-name: modal-animation;
+            -webkit-animation-duration: 0.5s;
+            animation-name: modal-animation;
+            animation-duration: 0.5s;
+        }
+</style>
+<div class="modal" id="AddModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label>Add User</label>
+            </div>
+            <div class="modal-body" id="Addmodalfill">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="subsa" class="btn btn-success" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#subsa").click(function () {
+        debugger;
+        var pp = "";        
+        $("#Addmodalfill > input").each(function () {
+            pp += $(this).val();
+            pp += "$";
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddUserMan", "Home")',
+            data: '{sal:"'+ pp+'" }',
+            contentType: "application/json; charset=utf-8",
+            success: function (data, status) {
+                location.reload(true);
+            },
+            failure: function (response) {
+
+            },
+            error: function (response) {
+
+            }
+        });
+    });
+</script>

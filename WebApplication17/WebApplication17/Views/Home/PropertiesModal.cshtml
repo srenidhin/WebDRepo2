@@ -1,0 +1,73 @@
+﻿<style>
+    .modal:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+    .modal-dialog {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .modal .modal-content {
+        padding: 20px 20px 20px 20px;
+        -webkit-animation-name: modal-animation;
+        -webkit-animation-duration: 0.5s;
+        animation-name: modal-animation;
+        animation-duration: 0.5s;
+    }
+</style>
+
+<div class="modal" id="myModal"  role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <span style="align-items:flex-end"><button type="button" class="close" data-dismiss="modal">&times;</button></span>
+            <div class="modal-header">
+                <label class="modal-title">Properties</label>
+            </div>
+            <div class="modal-body">
+                <label>Enter Name for file</label>
+                <input type="text" id="name"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnExport" class="btn btn-success" data-dismiss="modal">Finish</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnExport").click(function exporter() {
+        var list1 = "";
+        var list2 = "";
+        var y = $("#name").val();
+        debugger;
+        $("#tabs > thead > tr > th ").each(function () {
+            var value = $(this).text();
+            value = value.concat("$");
+            list1 = list1.concat(value);
+        });
+        $("#tabs > tbody > tr > td >textarea").each(function () {
+            var value = $(this).val();
+            value = value.concat("$");
+            list2 = list2.concat(value);
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XWriter", "Home")',
+            data: '{heads: "' + list1 + '",rows:"' + list2 + '",FileName:"' + y +'" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status) {
+                alert("File Uploaded Successfully");
+            },
+            failure: function (response) {
+
+            },
+            error: function (response) {
+
+            }
+        });
+    });
+</script>

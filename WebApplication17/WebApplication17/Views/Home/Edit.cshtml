@@ -1,0 +1,45 @@
+﻿<div class="modal" id="editModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label>Edit details</label>
+            </div>
+            <div class="modal-body" id="modalfill">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="subs" class="btn btn-success" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#subs").click(function () {
+        debugger;
+        var pp = "";
+        var hh = "";
+        $("#tabs > thead > tr > th").each(function () {
+            hh += $(this).text();
+            hh += "$";
+        });
+        $("#modalfill > input").each(function () {
+            pp += $(this).val();
+            pp += "$";
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("EditUserMan", "Home")',
+            data: '{head: "' + hh + '",sal:"'+ pp+'" }',
+            contentType: "application/json; charset=utf-8",
+            success: function (data, status) {
+                location.reload(true);
+            },
+            failure: function (response) {
+
+            },
+            error: function (response) {
+
+            }
+        });
+    });
+</script>

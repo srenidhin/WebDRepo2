@@ -1,0 +1,558 @@
+﻿@using System.Data
+@{
+    ViewBag.Title = "UserMan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+<style>
+    .delBut:hover {
+        cursor:pointer;
+    }
+
+    .editBut:hover {
+        cursor:pointer;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 17px;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(13px);
+      -ms-transform: translateX(13px);
+      transform: translateX(13px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 17px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+</style>
+<div class="container-fluid" >
+    <label class="header">User Management</label>
+    <div>
+        <input type="button" class="btn btn-default" value="Add Record" id="AddRec" />
+        <label style="padding-left:10px;padding-right:5px;color:white">Select Columns to search :</label>
+        <span id="SelCol" style="color:white;"></span>
+        <label style="padding-left:10px;padding-right:5px;color:white">Keyword :</label><input id="srctext" type="text" />
+        <label style="padding-left:10px;padding-right:5px;color:white">Columns to Display :</label>
+        <span id="DisCol" style="color:white;"></span>
+        <label style="color:white;margin-left:30px">Rows:</label>
+        <select id="RowsPerPage" name="RowsPerPage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+        </select>
+    </div>
+    <table class="table display" style="background-color:#222629;margin-top:20px;color:white;width:100%" id="tabls" hidden>
+        @if (ViewBag.Data != null)
+            {
+                int i = 0;
+            <thead class="">
+                <tr>
+                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                    {
+                        <th name="@column.ColumnName.ToUpper()">@column.ColumnName.ToUpper()</th>
+                    }
+                    <td style="font-weight:bold;font-size:14px;padding-bottom:0px"><label>ACTIONS</label></td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if ((ViewBag.Data as System.Data.DataTable).Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in (ViewBag.Data as System.Data.DataTable).Rows)
+                        {
+                            <tr id="row_@i">
+                                @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                                {
+                                    <td data-title='@column.ColumnName'>@dr[column].ToString()</td>
+                                }
+                                <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        int count = (ViewBag.Data as System.Data.DataTable).Columns.Count;
+                        <tr>
+                            <td colspan='@count' style="color:red;">
+                                No Data Found.
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+                <tfoot>
+                    <tr>
+                        @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                        {
+                            <th></th>
+                        }
+                    </tr>
+                </tfoot>
+                    }
+                    else
+                    {
+                        if (ViewBag.Error != null)
+                        {
+                            <tr>
+                                <td style="color:red;">
+                                    @(ViewBag.Error != null ? ViewBag.Error.ToString() : "")
+                                </td>
+                            </tr>
+                        }
+                    }
+    </table>
+    <table class="table display" style="background-color:#222629;margin-top:20px;color:white;width:100%" id="tabs">
+        @if (ViewBag.Data != null)
+            {
+                int i = 0;
+            <thead class="thead-light">
+                <tr>
+                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                    {
+                        <th name="@column.ColumnName.ToUpper()">@column.ColumnName.ToUpper()</th>
+                    }
+                    <td style="font-weight:bold;font-size:14px;padding-bottom:0px;background-color:#E8ECEF;color:#23232a"><label>ACTIONS</label></td>
+                </tr>
+            </thead>
+                <tbody>
+                    @{
+                        if ((ViewBag.Data as System.Data.DataTable).Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in (ViewBag.Data as System.Data.DataTable).Rows)
+                            {
+                                <tr id="row_@i">
+                                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                                    {
+                                        <td data-title='@column.ColumnName'>@dr[column].ToString()</td>
+                                    }
+                                    <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            int count = (ViewBag.Data as System.Data.DataTable).Columns.Count;
+                            <tr>
+                                <td colspan='@count' style="color:red;">
+                                    No Data Found.
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                        {
+                            <th></th>
+                        }
+                    </tr>
+                </tfoot>
+                        }
+                        else
+                        {
+                            if (ViewBag.Error != null)
+                            {
+                                <tr>
+                                    <td style="color:red;">
+                                        @(ViewBag.Error != null ? ViewBag.Error.ToString() : "")
+                                    </td>
+                                </tr>
+                            }
+                        }
+    </table>
+    <div style="margin-left:30%" id="pageView" hidden>
+            <div class="pagination" >
+                <a id="first" href="#">First</a>
+                <a id="prev" href="#">Prev</a>
+                <span style="border:solid;color:white;padding: 8px 16px;"><input style="width:30px" type="text" id="PageNo" value="1" /><label style="margin-left:5px" id="disp"></label></span> 
+                <a id="next" href="#">Next</a>
+                <a id="last" href="#">Last</a>
+            </div>
+        </div>
+    @Html.Partial("Edit")
+    @Html.Partial("Add")
+</div>
+<script>
+    $(document).ready(function () {
+        debugger;
+        //$('td:nth-child(2),th:nth-child(2)').hide();
+        $('td:nth-child(6)').each(function () {
+            var x = $(this).text();
+            if(x=="active")
+            {
+                $(this).html('<label class="switch"><input type="checkbox" checked><span class="slider round"></span></label><label style="padding-right:40px">Active</label>')
+            }
+            else
+            {
+                $(this).html('<label class="switch" ><input type="checkbox" ><span class="slider round"></span></label><label style="padding-right:40px">Deactivated</label>')
+            }
+        });
+        $("#tabs").on('change', '.switch', function () {
+            debugger; var changedTo = "";
+            var sibs = $(this).siblings('label');
+            if ($(this).children("input").prop("checked") == true)
+            {
+                changedTo = "active";
+                $(sibs).text("Active");
+            }
+            else
+            {
+                changedTo = "deactivated";
+                $(sibs).text("Deactivated");
+            }
+            var x = $(this).parentsUntil("tbody");
+            x = $(x).children("td").first()
+            x = $(x).text();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("StatusChange", "Home")',
+                data: '{us: "' + x + '",status:"'+changedTo+'" }',
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status) {
+                },
+                failure: function (response) {
+
+                },
+                error: function (response) {
+
+                }
+            });
+        });
+        $("#AddRec").click(function () {
+            var aa = "";
+            $("#tabs > thead > tr >th").each(function () {
+                var y = '<label>' + $(this).text() + '</label><input type="text" class="form-control" />';
+                aa += y;
+            });
+            $("#Addmodalfill").html(aa);
+            $("#AddModal").modal("show");
+        });
+        $("#tabs").on('click', '.editBut', function () {
+            debugger;
+            var x = $(this).parentsUntil("tbody");
+            x = $(x).children("td").first()
+            x = $(x).text();
+            var aa = "";
+            $("#tabs > thead > tr >th").each(function () {
+                var y = '<label>' + $(this).text() + '</label><input type="text" class="form-control" />';
+                aa += y;
+            });
+            $("#modalfill").html(aa);
+            var z = $("#modalfill").children("input").first();
+            $(z).val(x);
+            $(z).attr("readonly", true);
+            $("#editModal").modal("show");
+        });
+        $("#tabs").on('click', '.delBut', function () {
+            var x = $(this).parentsUntil("tbody");
+            x = $(x).children("td").first()
+            x = $(x).text();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("deleteUM", "Home")',
+                data: '{un: "' + x + '" }',
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status) {
+                    location.reload(true);
+                },
+                failure: function (response) {
+
+                },
+                error: function (response) {
+
+                }
+            });
+        });
+    });
+</script>
+<script>
+        var marker = 0;
+        var table = "";
+        var limit = 0;
+        var dispCount = 0;
+        var rowCount = 0;
+        $(document).ready(function () {
+            debugger;
+            var i = 0;
+            var x = '<select class="selectpicker"  multiple>';
+            $('#tabs > thead > tr > th').each(function () {
+                var y = '<option value=' + $(this).text() + '>' + $(this).text() + '</option>';
+                x += y;
+                i++;
+            });
+            x += '</select>';
+            $("#SelCol").html(x);
+            $("#DisCol").html(x);
+            var pp = [];
+            var kp = [];
+            rowCount = $('#tabs > tbody >tr').length;
+            if(rowCount != 0)
+            {
+                $("#move").prop('hidden', false);
+                $("#pageView").prop('hidden', false);
+                popTable();
+            }
+            function popTable() {
+                var i = 0;
+                rowCount = $('#tabs > tbody >tr').length;
+                table = $('#tabs > tbody').html();
+                limit = $('#RowsPerPage').val();
+                limit = limit < rowCount ? limit : rowCount;
+                dispCount = Math.ceil(rowCount / limit);
+                var dispBody = "";
+                marker = 0;
+                for (i = 0 ; i < limit; i++) {
+                    marker = table.indexOf('</tr>',marker);
+                    marker += 5;
+                }
+                dispBody = table.substring(0, marker);
+                $("#disp").text(' of ' + dispCount);
+                $('#tabs > tbody').html(dispBody);
+            }
+            
+            $('#SelCol > .selectpicker').on('change', function () {
+                debugger;
+                $("#srctext").val("");
+                $("#srctext").trigger('keyup');
+                pp = $(this).val();
+
+                //var ap = [];
+                //for (var x in pp) {
+                //    var l = pp[x];
+                //    l = parseInt(l);
+                //    ap.push(l);
+                //}
+                //pp = ap;
+
+            });
+            function propernext()
+            {
+                var i = 1;
+                if (kp != "") {
+                    $("#tabs>thead>tr>th").each(function () {
+                        var adas = $(this).text();
+                        if (kp.indexOf(adas) == -1) {
+                            $("#tabs tr > th:nth-child(" + i + ")").hide();
+                            $("#tabs tr > td:nth-child(" + i + ")").hide();
+                        }
+                        else {
+                            $("#tabs tr > th:nth-child(" + i + ")").show();
+                            $("#tabs tr > td:nth-child(" + i + ")").show();
+                        }
+                        i++;
+                    });
+                }
+                else {
+                    $("#tabs>thead>tr>th").each(function () {
+                        if (i != 2) {
+                            $("#tabs tr > th:nth-child(" + i + ")").show();
+                            $("#tabs tr > td:nth-child(" + i + ")").show();
+                        }
+                        i++;
+                    });
+                }
+            }
+            $("#DisCol > .selectpicker").on('change', function () {
+                debugger;
+                kp = $(this).val();
+                propernext();
+            });
+            $("#srctext").focusout(function () {
+                var txt = $("#srctext").val();
+                if (txt == "") {
+                    var kk = $("#tabls > tbody").html();
+                    $("#tabs > tbody").html(kk);
+                    popTable();
+                }
+                else {
+                    var ht = "";
+                    $("#tabls >tbody > tr > td ").each(function () {
+                        debugger;
+                        var currr = $(this).text();
+                        var x = $(this).attr('data-title');
+                        if (x != undefined) {
+                            x = x.toUpperCase();
+                            var yap = $(this).parentsUntil('tbody').html();
+                            if (pp.indexOf(x) != -1) {
+                                if (currr.indexOf(txt) != -1) {
+                                    ht += "<tr>" + yap + "</tr>";
+                                }
+                            }
+                        }
+                    });
+                    $("#tabs > tbody").html(ht);
+                    popTable();
+                    propernext();
+                }
+            });
+            $("#first").click(function () {
+                debugger;
+                var x = $("#PageNo").val();
+                    marker = 0;
+                    for (i = 0 ; i < limit; i++) {
+                        marker = table.indexOf('</tr>', marker);
+                        marker += 5;
+                    }
+                    var dispBody = table.substring(0, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(1);
+                    propernext();
+            });
+            $("#prev").click(function () {
+                debugger; var i = 0;
+                var x = $("#PageNo").val();
+                if (x == dispCount)
+                {
+                    var k = (rowCount % limit);
+                    for (i = 0; i < k; i++) {
+                        marker -= 5;
+                        marker = table.lastIndexOf('</tr>', marker);
+                    }
+                    var y = marker;
+                    for (i = 0; i < limit; i++) {
+                        y -= 5;
+                        y = table.lastIndexOf('</tr>', y);
+                    }
+                    var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(x - 1);
+                    propernext();
+                }
+                else if (x != 1) {
+                    for(i=0;i<limit;i++)
+                    {
+                        marker-=5;
+                        marker=table.lastIndexOf('</tr>',marker);
+                    }
+                    var y=marker;
+                    for(i=0;i<limit;i++)
+                    {
+                         y-=5;
+                         y=table.lastIndexOf('</tr>',y);
+                    }
+                    var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(x - 1);
+                    propernext();
+                }
+            });
+            $("#next").click(function () {
+                debugger;
+                var x = $("#PageNo").val();
+                x = parseInt(x);
+                if (x == dispCount - 1)
+                {
+                    $("#last").click();
+                }
+                else if (x != dispCount) {
+                    var y = marker;
+                    for (i = 0 ; i < limit; i++) {
+                        marker = table.indexOf('</tr>', marker);
+                        marker += 5;
+                    }
+                    var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(x + 1);
+                    propernext();
+                }
+            });
+            $("#last").click(function () {
+                debugger;
+                var x = $("#PageNo").val();
+                x = parseInt(x);
+                var xx = (rowCount % limit);
+                xx = (xx == 0) ? limit : xx;
+                    marker = table.lastIndexOf('</tr>');
+                    marker += 4;
+                    var i = 0; var y = marker;
+                    for (i = 0; i < xx; i++)
+                    {
+                        y -= 5;
+                        y = table.lastIndexOf('</tr>', y);
+                    }
+                   var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(dispCount);
+                    propernext();
+            });
+            $("#PageNo").change(function () {
+                var x = $("#PageNo").val();
+                if(x==dispCount)
+                {
+                    $("#last").click();
+                }
+                else if(x==1)
+                {
+                    $("#first").click();
+                }
+                else
+                {
+                    debugger;
+                    var i = 0;
+                    x = (x - 1);
+                    $("#first").click();
+                    for (; i < x; i++)
+                        $("#next").click();
+                }
+            });
+            $("#RowsPerPage").change(function () {
+                debugger;
+                var x = $("#tabls > tbody").html();
+                $("#tabs > tbody").html(x);
+                popTable();
+                propernext();
+            });
+        });
+</script>

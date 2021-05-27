@@ -1,0 +1,223 @@
+﻿@using System.Data
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <title>Index</title>
+</head>
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+    .delBut{
+        
+    }
+    .editBut{
+        
+    }
+</style>
+<body>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="postedFile">
+        <input type="submit" value="Import" align="center">
+    }
+       <div class="container">
+        <div class="row">
+            <div>
+                <table class="table table-responsive" style="background-color:white" id="tabs">
+                    @if (ViewBag.Data != null)
+                    {
+                        int i = 0;
+                        <thead>
+                            <tr>
+                                @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                                {
+                                    <th >@column.ColumnName.ToUpper()</th>
+                                }
+                                <td>Actions</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if ((ViewBag.Data as System.Data.DataTable).Rows.Count > 0)
+                                {
+                                    foreach (DataRow dr in (ViewBag.Data as System.Data.DataTable).Rows)
+                                    {
+                                        <tr id="row_@i">
+                                        @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                                        {
+                                            <td  data-title='@column.ColumnName'><textarea class="apo" readonly>@dr[column].ToString()</textarea></td>
+                                        }
+                                            <td><input type="button" class="editBut" value="Edit"/><input type="button" class="delBut" value="Delete" /></td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    int count = (ViewBag.Data as System.Data.DataTable).Columns.Count;
+                                    <tr>
+                                        <td colspan='@count' style="color:red;">
+                                            No Data Found.
+                                        </td>
+                                    </tr>
+                                }
+                             }
+                        </tbody>
+                    }
+                    else
+                    {
+                        if (ViewBag.Error != null)
+                        {
+                            <tr>
+                                <td style="color:red;">
+                                    @(ViewBag.Error != null ? ViewBag.Error.ToString() : "")
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+                <input type="button" id="btnExport" value="export"/>
+                <input type="button" id="AddRow" value="Add new Record" />
+            </div>  
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var y;
+    $("#AddRow").click(function rowAdd() {
+        debugger;
+        var i = $("#tabs > tbody > tr").last().attr("id");
+        i = i.substr(4);
+        i = parseInt(i, 10);
+        i++;
+        var x = '<tr id="row_'+i+'">';
+        $("#tabs > thead > tr > th").each(function () {
+            x = x.concat('<td><textarea class="apo" rows="2" cols=20"></textarea></td>');
+        });
+        x = x.concat('<td><input type="button" class="editBut" value="Edit"/><input type="button" class="delBut" value="Delete" /></td></tr>')
+        $("#tabs > tbody").append(x);
+        y = $("#tabs > tbody > tr").last();
+    });
+    $(".editBut").click(function editRow() {
+        var x = $(this).closest("tr").children("td").children("textarea");
+        $(x).each(function () {
+            $(this).prop('readonly', false);
+        });
+        debugger;
+        y = $(this).closest("tr");
+    });
+    $("#tabs > tbody > tr").focusin(function () {
+        var list1 = "";
+        var list2 = "";
+        var k = $(y).attr("id");
+        var x = $(this).attr("id");
+        if(x!=k)
+        {
+            var z = $(y).children("td").children("textarea");
+            $("#tabs > thead > tr > th ").each(function () {
+                var value = $(this).text();
+                value = value.concat("$");
+                list1 = list1.concat(value);
+            });
+            debugger;
+            $(z).each(function () {
+                $(this).prop('readonly', true);
+                var tex = $(this).val();
+                tex = tex.concat("$");
+                list2 = list2.concat(tex);
+            });
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Updater", "Home")',
+                data: '{heads: "' + list1 + '",rows:"' + list2 + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+
+                },
+                failure: function (response) {
+
+                },
+                error: function (response) {
+
+                }
+            });
+        }
+
+    });
+    $(".delBut").click(function deleteRow() {
+        var x = $(this).closest("tr").attr("id");
+        x = x.substr(4);
+        x = parseInt(x, 10);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Deleter", "Home")',
+            data: '{row: "' + x + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status) {
+
+            },
+            failure: function (response) {
+
+            },
+            error: function (response) {
+
+            }
+        });
+        $(this).parentsUntil("tbody").remove();
+    });
+    $("#btnExport").click(function exporter() {
+        var list1 = "";
+        var list2 = "";
+        debugger;
+        $("#tabs > thead > tr > th ").each(function () {
+            var value = $(this).text();
+            value = value.concat("$");
+            list1 = list1.concat(value);
+        });
+        $("#tabs > tbody > tr > td >textarea").each(function () {
+            var value = $(this).val();
+            value = value.concat("$");
+            list2 = list2.concat(value);
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XWriter", "Home")',
+            data: '{heads: "' + list1 + '",rows:"'+list2+'" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data,status) {
+
+            },
+            failure: function (response) {
+
+            },
+            error: function (response) {
+
+            }
+        });
+
+        //function successFunc(data, status) {
+        //    alert(data);
+        //}
+
+        //function errorFunc() {
+        //    alert('error');
+        //}
+    });
+
+</script>

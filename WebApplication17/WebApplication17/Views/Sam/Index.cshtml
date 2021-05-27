@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@*<!DOCTYPE html>*@
+
+@*<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>*@
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>*@
+@*</head>
+<body>*@
+<div class="container-fluid">
+    <label class="header">Quick Edit</label>
+    <div class="row">
+            @using (Html.BeginForm("Index", "Sam", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="col-md-6" style="color:white"><input type="file" name="postedFile"></div>
+                <div class="col-md-6" style="padding-left:30px"><input type="submit" class="btn btn-default" value="Show" id="show"></div>
+            }
+    </div>
+    <div id="instr" style="color:white;border:groove;margin-top:10px">
+        <label style="font-size:24px;padding-left:10px">Instructions</label>
+        <ul>
+            <li>Click "Choose file" button and choose your file to display</li>
+            <li>After your table is displayed,Edit file according to your needs</li>
+        </ul>
+        <label style="padding-left:10px;font-weight:400">*Note: This table does not save data anywhere so it is advised to download the excel before switching pages</label>
+    </div>
+    <div class="row">
+            @Html.Partial("TablePartial")
+    </div>
+</div>
+@*</body>
+</html>*@
+<script>
+    $(document).ready(function () {
+        if ($("#tabs > tbody > tr").length != 0) {
+            $("#instr").prop('hidden', true);
+        }
+    });
+</script>

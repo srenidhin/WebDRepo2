@@ -1,0 +1,303 @@
+﻿
+@{
+    ViewBag.Title = "DashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .accordion {
+      background-color: #474B4F;
+      color: #61892F;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      transition: 0.4s;
+      font-family: 'Montserrat', sans-serif;
+      font-weight:400;
+    }
+
+    .accordion.active, .accordion:hover {
+      background-color: #6B6E70;
+      color:#86C232;
+    }
+
+    .accordion:after {
+      content: '\002B';
+      color: #000;
+      font-weight: bold;
+      float: right;
+      margin-left: 5px;
+    }
+
+    .accordion.active:after {
+      content: "\2212";
+      color:#fff;
+    }
+
+    .panel {
+        font-family: 'Montserrat', sans-serif;
+        font-weight:400;
+      padding: 0 18px;
+      background-color: white;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+      border:none;
+      outline:none;
+    }
+    .disps{
+        box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.4);
+        background-color:#6B6E70;
+        color:white;
+        margin-left:10px;
+        text-align:center;
+        padding-top:25px;
+        padding-bottom:30px;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            transform: translate3d(0,40px,0)
+        }
+
+        to {
+            transform: translate3d(0,0,0);
+            opacity: 1
+        }
+    }
+
+    @@-webkit-keyframes fadeInUp {
+        from {
+            transform: translate3d(0,40px,0)
+        }
+
+        to {
+            transform: translate3d(0,0,0);
+            opacity: 1
+        }
+    }
+
+    .animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-fill-mode: both
+    }
+
+    .animatedFadeInUp {
+        opacity: 0
+    }
+
+    .fadeInUp {
+        opacity: 0;
+        animation-name: fadeInUp;
+        -webkit-animation-name: fadeInUp;
+    }
+</style>
+<div class="container-fluid">
+    <label class="header">Home</label>
+    <div class="row" style="margin-bottom:30px;margin-left:20px">
+        <div class="col-md-2 disps" >
+            <label style="color:#86C232">No. Of Files</label><br />
+            <label style="font-size:90px;color:#86C232">@ViewBag.Val1</label>
+        </div>
+        <div class="col-md-2 disps" >
+            <label style="color:#86C232">No. Of files created by you</label><br />
+            <label style="font-size:90px;color:#86C232">@ViewBag.Val2</label>
+        </div>
+        <div class="col-md-2 disps">
+            <label style="color:#86C232">No. Of Users</label><br />
+            <label style="font-size:90px;color:#86C232">@ViewBag.Val3</label>
+        </div>
+        <div class="col-md-2 disps">
+            <label style="color:#86C232">No. Of Active Users</label><br />
+            <label style="font-size:90px;color:#86C232">@ViewBag.Val4</label>
+        </div>
+        <div class="col-md-2 disps">
+            <label style="color:#86C232">No. Of deactivated Users</label><br />
+            <label style="font-size:90px;color:#86C232">@ViewBag.Val5</label>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6 animated animatedFadeInUp fadeInUp" style="animation-delay:0.3s">
+            <label style="margin-left:70px;color:#61892F;font-size:20px;padding-bottom:20px">Files Overview</label>
+            <canvas id="bdayChart" style="margin-left:60px"></canvas>
+        </div>
+        <div class="col-md-6 animated animatedFadeInUp fadeInUp" style="animation-delay:0.3s;">
+            <label style="margin-left:70px;color:#61892F;font-size:20px">Users Overview</label>
+            <canvas id="budChart" style="max-height:400px;max-width:400px;margin-left:200px"></canvas>
+        </div>
+    </div>
+    <div class="animated animatedFadeInUp fadeInUp" style="animation-delay:0.3s">
+        <button class="accordion">Section 1</button>
+        <div class="panel">
+            <p style="padding-top:10px">Hello from Section 1</p>
+            <div class="col-md-12" style="padding-bottom:10px">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Text Box 1</label>
+                        <input type="text" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Text Box 2</label>
+                        <input type="text" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="accordion">Section 2</button>
+        <div class="panel">
+            <p style="padding-top:10px">Hello from Section 2</p>
+            <div class="col-md-12" style="padding-bottom:10px">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Text Box 1</label>
+                        <input type="text" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Text Box 2</label>
+                        <input type="text" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="accordion">Section 3</button>
+        <div class="panel">
+            <p style="padding-top:10px">Hello from Section 3</p>
+            <div class="col-md-12" style="padding-bottom:10px">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Text Box 1</label>
+                        <input type="text" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Text Box 2</label>
+                        <input type="text" />
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  });
+}
+</script>
+<script>
+    debugger;
+    var i=0;
+    var ctx = document.getElementById("bdayChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+            datasets: [{
+                data: [@ViewBag.chart2],
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        steps:1
+                    }
+                }]
+            },
+            legend: {
+                display:false
+            }
+        }
+    });
+</script>
+<script>
+    var ctxP = document.getElementById("budChart").getContext('2d');
+    var myPieChart = new Chart(ctxP, {
+        type: 'pie',
+        data: {
+            labels: ["Active","Deactive"],
+            datasets: [{
+                data: [@ViewBag.Val4,@ViewBag.Val5],
+                backgroundColor: ["#F7464A", "#46BFBD"],
+                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1"]
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'right',
+                labels: {
+                    padding: 20,
+                    boxWidth: 10
+                }
+            },
+            plugins: {
+                datalabels: {
+                    labelformatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                        return percentage;
+                    },
+                    color: 'white',
+                    labels: {
+                        title: {
+                            font: {
+                                size: '20'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>

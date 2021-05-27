@@ -1,0 +1,107 @@
+﻿@model WebApplication17.Models.FileNameViewModel
+@using System.Data
+@{
+    ViewBag.Title = "EditTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+     .delBut {
+    }
+
+    .editBut {
+    }
+</style>
+<div class="container-fluid">
+        <label class="header">Edit Files</label>
+    <div class="row">
+        <div class="col-md-6"><label style="color:#fff;font-size:24px;padding-right:10px;">Files :</label>
+        @Html.DropDownListFor(m => m.chosenFile, Model.Files, new { @class="selectpicker", @id = "chosen" ,@style = "width:200px"})
+        <input class="btn btn-default" type="button" value="Load" id="load" style="margin-left:10px"/></div>
+        <input class="btn btn-default" type="button" id="AddRow" value="Add new Record" hidden />
+    </div>
+    <div id="instr" style="color:white;border:groove;margin-top:10px">
+        <label style="font-size:24px;padding-left:10px">Instructions</label>
+        <ul>
+            <li>Choose your file to display from the dropdown box</li>
+            <li>After choosing, Click on the "Load" button to display your file</li>
+            <li>Edit file according to your needs</li>
+        </ul>
+    </div>
+    <div class="container-fluid" style="margin-top:10px">
+        <div id="tablehere">
+        </div>        
+    </div>
+    <div class="row" style="margin-top:20px">
+        
+    </div>
+</div>
+<script>
+    $("#AddRow").click(function rowAdd() {
+        var i = $("#tabs > tbody > tr").last().attr("id");
+        i = i.substr(4);
+        i = parseInt(i, 10);
+        i++;
+        var x = '<tr id="row_' + i + '">';
+        $("#tabs > thead > tr > th").each(function () {
+            x = x.concat('<td><textarea class="apo" rows="2" cols=20"></textarea></td>');
+        });
+        x = x.concat('<td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>')
+        $("#tabs > tbody").append(x);
+        y = $("#tabs > tbody > tr").last();
+    });
+    $("#load").click(function () {
+        debugger;
+        $("#instr").prop('hidden', true);
+        var x = $("#chosen").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("TablePartial", "Home")',
+            data: {'fPath': x },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "json",
+            success: function (data, status) {
+                $("#tablehere").html(data);
+                $("#Download").prop("hidden", false);
+                $("#AddRow").prop("hidden", false);
+            },
+            failure: function (response) {
+                debugger;
+            },
+            error: function (response) {
+                debugger;
+            }
+        });
+    });
+    $("#btnExport").click(function exporter() {
+        var list1 = "";
+        var list2 = "";
+        debugger;
+        $("#tabs > thead > tr > th ").each(function () {
+            var value = $(this).text();
+            value = value.concat("$");
+            list1 = list1.concat(value);
+        });
+        $("#tabs > tbody > tr > td >textarea").each(function () {
+            var value = $(this).val();
+            value = value.concat("$");
+            list2 = list2.concat(value);
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XWriter", "Home")',
+            data: '{heads: "' + list1 + '",rows:"' + list2 + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status) {
+
+            },
+            failure: function (response) {
+
+            },
+            error: function (response) {
+
+            }
+        });
+    });
+</script>

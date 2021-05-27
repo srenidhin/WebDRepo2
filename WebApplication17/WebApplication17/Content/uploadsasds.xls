@@ -1,0 +1,49 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Worksheet</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>
+        <thead>
+            <tr>
+                    <th>HOUSENO</th>
+                    <th>NAME</th>
+                    <th>UNITSCONSUMED</th>
+                    <th>COST</th>
+                <td style="font-weight:bold;font-size:14px;padding-bottom:0px"></td>
+            </tr>
+        </thead>
+                    <tbody>
+                                    <tr id="row_0">
+                                            <td data-title="HouseNo"><input type="text" value="H100" readonly=""></td>
+                                            <td data-title="Name"><input type="text" value="ABA" readonly=""></td>
+                                            <td data-title="UnitsConsumed"><input type="text" value="1" readonly=""></td>
+                                            <td data-title="Cost"><input type="text" value="100" readonly=""></td>
+                                        <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                                    </tr>
+                                    <tr id="row_1">
+                                            <td data-title="HouseNo"><input type="text" value="H101" readonly=""></td>
+                                            <td data-title="Name"><input type="text" value="ABA" readonly=""></td>
+                                            <td data-title="UnitsConsumed"><input type="text" value="2" readonly=""></td>
+                                            <td data-title="Cost"><input type="text" value="100" readonly=""></td>
+                                        <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                                    </tr>
+                                    <tr id="row_2">
+                                            <td data-title="HouseNo"><input type="text" value="H102" readonly=""></td>
+                                            <td data-title="Name"><input type="text" value="ABA" readonly=""></td>
+                                            <td data-title="UnitsConsumed"><input type="text" value="3" readonly=""></td>
+                                            <td data-title="Cost"><input type="text" value="100" readonly=""></td>
+                                        <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                                    </tr>
+                                    <tr id="row_3">
+                                            <td data-title="HouseNo"><input type="text" value="H103" readonly=""></td>
+                                            <td data-title="Name"><input type="text" value="ABA" readonly=""></td>
+                                            <td data-title="UnitsConsumed"><input type="text" value="4" readonly=""></td>
+                                            <td data-title="Cost"><input type="text" value="100" readonly=""></td>
+                                        <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                                    </tr>
+                                    <tr id="row_4">
+                                            <td data-title="HouseNo"><input type="text" value="H104" readonly=""></td>
+                                            <td data-title="Name"><input type="text" value="ABA" readonly=""></td>
+                                            <td data-title="UnitsConsumed"><input type="text" value="5" readonly=""></td>
+                                            <td data-title="Cost"><input type="text" value="100" readonly=""></td>
+                                        <td><a class="editBut" style="padding-right:5px"><i class="fa fa-pencil-square-o" style="color:yellowgreen;font-size:22px;"></i></a><a class="delBut"><i class="fa fa-trash-o" style="color:red;font-size:20px"></i></a></td>
+                                    </tr>
+
+                    </tbody>
+</table></body></html>

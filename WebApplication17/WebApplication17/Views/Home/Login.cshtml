@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid" style="padding-top:100px">
+    <div class="row">
+        <label style="font-weight:800;font-style:italic;font-size:30px;color:white;margin-left:50%;">Login</label>
+    </div>
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div>
+            <div class="row" style="margin-bottom:5px;margin-left:40%;">
+                <div class="col-md-1" style="margin-right:10px">
+                    <label style="margin-top:10px;color:white;padding-right:20px"> Username:</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="username" class="form-control"/>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:5px;margin-left:40%;">
+                <div class="col-md-1" style="margin-right:10px">
+                    <label style="margin-top:10px;color:white"> Password:</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="password" name="password" class="form-control"/>
+                </div>
+            </div>
+            <div class="row" style="margin-left:50%;">
+                <input type="submit" class="btn btn-success" value="Log In" />
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:5px;margin-left:40%;">
+            <label style="color:orangered">@ViewBag.Status</label>
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $("#inside").hide();
+    })
+</script>

@@ -1,0 +1,412 @@
+﻿@using System.Data
+@{
+    ViewBag.Title = "FR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+<div class="container-fluid">
+    <label class="header">File Reports</label>
+    <div>
+        <label style="padding-left:10px;padding-right:5px;color:white">Select Columns to search :</label>
+        <span id="SelCol" style="color:white;"></span>
+        <label style="padding-left:10px;padding-right:5px;color:white">Keyword :</label><input id="srctext" type="text" />
+        <label style="padding-left:10px;padding-right:5px;color:white">Columns to Display :</label>
+        <span id="DisCol" style="color:white;"></span>
+        <label style="color:white;margin-left:30px">Rows:</label>
+        <select id="RowsPerPage" name="RowsPerPage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+        </select>
+    </div>
+    <table class="table display" style="background-color:#222629;margin-top:20px;color:white;width:100%" id="tabls" hidden>
+        @if (ViewBag.Data != null)
+            {
+                int i = 0;
+            <thead class="">
+                <tr>
+                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                    {
+                        <th name="@column.ColumnName.ToUpper()">@column.ColumnName.ToUpper()</th>
+                    }                    
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if ((ViewBag.Data as System.Data.DataTable).Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in (ViewBag.Data as System.Data.DataTable).Rows)
+                        {
+                            <tr id="row_@i">
+                                @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                                {
+                                    <td data-title='@column.ColumnName'>@dr[column].ToString()</td>
+                                }
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        int count = (ViewBag.Data as System.Data.DataTable).Columns.Count;
+                        <tr>
+                            <td colspan='@count' style="color:red;">
+                                No Data Found.
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </tfoot>
+                    }
+                    else
+                    {
+                        if (ViewBag.Error != null)
+                        {
+                            <tr>
+                                <td style="color:red;">
+                                    @(ViewBag.Error != null ? ViewBag.Error.ToString() : "")
+                                </td>
+                            </tr>
+                        }
+                    }
+    </table>
+    <table class="table display" style="background-color:#222629;margin-top:20px;color:white;width:100%" id="tabs">
+        @if (ViewBag.Data != null)
+            {
+                int i = 0;
+            <thead class="thead-light">
+                <tr>
+                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                    {
+                        <th name="@column.ColumnName.ToUpper()">@column.ColumnName.ToUpper()</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if ((ViewBag.Data as System.Data.DataTable).Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in (ViewBag.Data as System.Data.DataTable).Rows)
+                        {
+                            <tr id="row_@i">
+                                @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                                {
+                                    <td data-title='@column.ColumnName'>@dr[column].ToString()</td>
+                                }
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        int count = (ViewBag.Data as System.Data.DataTable).Columns.Count;
+                        <tr>
+                            <td colspan='@count' style="color:red;">
+                                No Data Found.
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    @foreach (DataColumn column in (ViewBag.Data as System.Data.DataTable).Columns)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </tfoot>
+                    }
+                    else
+                    {
+                        if (ViewBag.Error != null)
+                        {
+                            <tr>
+                                <td style="color:red;">
+                                    @(ViewBag.Error != null ? ViewBag.Error.ToString() : "")
+                                </td>
+                            </tr>
+                        }
+                    }
+    </table>
+</div>
+<div style="margin-left:30%" id="pageView" hidden>
+    <div class="pagination">
+        <a id="first" href="#">First</a>
+        <a id="prev" href="#">Prev</a>
+        <span style="border:solid;color:white;padding: 8px 16px;">
+            <input style="width:30px" type="text" id="PageNo" value="1" /><label style="margin-left:5px" id="disp"></label></span>
+            <a id="next" href="#">Next</a>
+            <a id="last" href="#">Last</a>
+    </div>
+</div>
+<div class="container">
+    <input class="form-control" type="button" value="Download as Excel" onclick="exportToExcel()" style="margin-left:75%" />
+</div>
+<script>
+    function exportToExcel() {
+        var htmls = "";
+        var uri = 'data:application/vnd.ms-excel;base64,';
+        var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+        var base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        };
+        var format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) {
+                return c[p];
+            })
+        };
+        debugger;
+        htmls = $("#tabs").html();
+        htmls = htmls.replace('ACTIONS','')
+        var ctx = {
+            worksheet: 'Worksheet',
+            table: htmls
+        }
+        var link = document.createElement("a");
+        var d = new Date();
+        var strDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+        link.download = "FileReports" + strDate + ".xls";
+        link.href = uri + base64(format(template, ctx));
+        link.click();
+    }
+</script>
+<script>
+        var marker = 0;
+        var table = "";
+        var limit = 0;
+        var dispCount = 0;
+        var rowCount = 0;
+        $(document).ready(function () {
+            debugger;
+            rowCount = $('#tabs > tbody >tr').length;
+            if(rowCount != 0)
+            {
+                $("#move").prop('hidden', false);
+                $("#pageView").prop('hidden', false);
+                popTable();
+            }
+            function popTable() {
+                var i = 0;
+                rowCount = $('#tabs > tbody >tr').length;
+                table = $('#tabs > tbody').html();
+                limit = $('#RowsPerPage').val();
+                limit = limit < rowCount ? limit : rowCount;
+                dispCount = Math.ceil(rowCount / limit);
+                var dispBody = "";
+                marker = 0;
+                for (i = 0 ; i < limit; i++) {
+                    marker = table.indexOf('</tr>',marker);
+                    marker += 5;
+                }
+                dispBody = table.substring(0, marker);
+                $("#disp").text(' of ' + dispCount);
+                $('#tabs > tbody').html(dispBody);
+            }
+            var i = 0;
+            var x = '<select class="selectpicker"  multiple>';
+            $('#tabs > thead > tr > th').each(function () {
+                var y = '<option value="' + $(this).text() + '">' + $(this).text() + '</option>';
+                x += y;
+                i++;
+            });
+            x += '</select>';
+            $("#SelCol").html(x);
+            $("#DisCol").html(x);
+            var pp = [];
+            var kp = [];
+            $('#SelCol > .selectpicker').on('change', function () {
+                debugger;
+                $("#srctext").val("");
+                $("#srctext").trigger('keyup');
+                pp = $(this).val();
+                //var ap = [];
+                //for (var x in pp) {
+                //    var l = pp[x];
+                //    l = parseInt(l);
+                //    ap.push(l);
+                //}
+                //pp = ap;
+            });
+            function propernext() {
+                var i = 1;
+                if (kp != "") {
+                    $("#tabs>thead>tr>th").each(function () {
+                        var adas = $(this).text();
+                        if (kp.indexOf(adas) == -1) {
+                            $("#tabs tr > th:nth-child(" + i + ")").hide();
+                            $("#tabs tr > td:nth-child(" + i + ")").hide();
+                        }
+                        else {
+                            $("#tabs tr > th:nth-child(" + i + ")").show();
+                            $("#tabs tr > td:nth-child(" + i + ")").show();
+                        }
+                        i++;
+                    });
+                }
+                else {
+                    $("#tabs>thead>tr>th").each(function () {
+                            $("#tabs tr > th:nth-child(" + i + ")").show();
+                            $("#tabs tr > td:nth-child(" + i + ")").show();
+                            i++;
+                    });
+                }
+            }
+            $("#DisCol > .selectpicker").on('change', function () {
+                kp = $(this).val();
+                propernext();
+            });
+            $("#srctext").focusout(function () {
+                var txt = $("#srctext").val();
+                if (txt == "") {
+                    var kk = $("#tabls > tbody").html();
+                    $("#tabs > tbody").html(kk);
+                    popTable();
+                }
+                else {
+                    var ht = "";
+                    $("#tabls >tbody > tr > td ").each(function () {
+                        debugger;
+                        var currr = $(this).text();
+                        var x = $(this).attr('data-title');
+                        if (x != undefined) {
+                            x = x.toUpperCase();
+                            var yap = $(this).parentsUntil('tbody').html();
+                            if (pp.indexOf(x) != -1) {
+                                if (currr.indexOf(txt) != -1) {
+                                    ht += "<tr>" + yap + "</tr>";
+                                }
+                            }
+                        }
+                    });
+                    $("#tabs > tbody").html(ht);
+                    popTable();
+                    propernext();
+                }
+            });
+            $("#first").click(function () {
+                debugger;
+                var x = $("#PageNo").val();
+                    marker = 0;
+                    for (i = 0 ; i < limit; i++) {
+                        marker = table.indexOf('</tr>', marker);
+                        marker += 5;
+                    }
+                    var dispBody = table.substring(0, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(1);
+                    propernext();
+            });
+            $("#prev").click(function () {
+                debugger; var i = 0;
+                var x = $("#PageNo").val();
+                if (x == dispCount)
+                {
+                    var k = (rowCount % limit);
+                    for (i = 0; i < k; i++) {
+                        marker -= 5;
+                        marker = table.lastIndexOf('</tr>', marker);
+                    }
+                    var y = marker;
+                    for (i = 0; i < limit; i++) {
+                        y -= 5;
+                        y = table.lastIndexOf('</tr>', y);
+                    }
+                    var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(x - 1);
+                    propernext();
+                }
+                else if (x != 1) {
+                    for(i=0;i<limit;i++)
+                    {
+                        marker-=5;
+                        marker=table.lastIndexOf('</tr>',marker);
+                    }
+                    var y=marker;
+                    for(i=0;i<limit;i++)
+                    {
+                         y-=5;
+                         y=table.lastIndexOf('</tr>',y);
+                    }
+                    var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(x - 1);
+                    propernext();
+                }
+            });
+            $("#next").click(function () {
+                debugger;
+                var x = $("#PageNo").val();
+                x = parseInt(x);
+                if (x == dispCount - 1)
+                {
+                    $("#last").click();
+                }
+                else if (x != dispCount) {
+                    var y = marker;
+                    for (i = 0 ; i < limit; i++) {
+                        marker = table.indexOf('</tr>', marker);
+                        marker += 5;
+                    }
+                    var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(x + 1);
+                    propernext();
+                }
+            });
+            $("#last").click(function () {
+                debugger;
+                var x = $("#PageNo").val();
+                x = parseInt(x);
+                    var xx = (rowCount % limit);
+                    marker = table.lastIndexOf('</tr>');
+                    marker += 4;
+                    var i = 0; var y = marker;
+                    for (i = 0; i < xx; i++)
+                    {
+                        y -= 5;
+                        y = table.lastIndexOf('</tr>', y);
+                    }
+                   var dispBody = table.substring(y, marker);
+                    $('#tabs > tbody').html(dispBody);
+                    $("#PageNo").val(dispCount);
+                    propernext();
+            });
+            $("#PageNo").change(function () {
+                var x = $("#PageNo").val();
+                if(x==dispCount)
+                {
+                    $("#last").click();
+                }
+                else if(x==1)
+                {
+                    $("#first").click();
+                }
+                else
+                {
+                    debugger;
+                    var i = 0;
+                    x = (x - 1);
+                    $("#first").click();
+                    for (; i < x; i++)
+                        $("#next").click();
+                }
+            });
+            $("#RowsPerPage").change(function () {
+                var x = $("#tabls > tbody").html();
+                $("#tabs > tbody").html(x);
+                popTable();
+                propernext();
+            });
+        });
+</script>
